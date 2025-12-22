@@ -1,9 +1,9 @@
-#  aisuite
+#  aisuite-extendedmodels
 
-[![PyPI](https://img.shields.io/pypi/v/aisuite)](https://pypi.org/project/aisuite/)
+[![PyPI](https://img.shields.io/pypi/v/aisuite-extendedmodels)](https://pypi.org/project/aisuite-extendedmodels/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-`aisuite` is a lightweight Python library that provides a **unified API for working with multiple Generative AI providers**.  
+`aisuite-extendedmodels` is a lightweight Python library that provides a **unified API for working with multiple Generative AI providers**.  
 It offers a consistent interface for models from *OpenAI, Anthropic, Google Vertex AI, Google GenAI, Hugging Face, AWS, Cohere, Mistral, Ollama*, and others—abstracting away SDK differences, authentication details, and parameter variations.  
 Its design is modeled after OpenAI’s API style, making it instantly familiar and easy to adopt.
 
@@ -27,24 +27,24 @@ It’s designed for low learning curve — so you can focus on building AI syste
 
 ## Installation
 
-You can install just the base `aisuite` package, or install a provider's package along with `aisuite`.
+You can install just the base `aisuite-extendedmodels` package, or install a provider's package along with `aisuite-extendedmodels`.
 
 Install just the base package without any provider SDKs:
 
 ```shell
-pip install aisuite
+pip install aisuite-extendedmodels
 ```
 
-Install aisuite with a specific provider (e.g., Anthropic):
+Install aisuite-extendedmodels with a specific provider (e.g., Anthropic):
 
 ```shell
-pip install 'aisuite[anthropic]'
+pip install 'aisuite-extendedmodels[anthropic]'
 ```
 
-Install aisuite with all provider libraries:
+Install aisuite-extendedmodels with all provider libraries:
 
 ```shell
-pip install 'aisuite[all]'
+pip install 'aisuite-extendedmodels[all]'
 ```
 
 ## Setup

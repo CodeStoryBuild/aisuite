@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "aisuite"
+name = "aisuite-extendedmodels"
 version = "0.1.14"
 description = "Uniform access layer for LLMs"
 authors = ["Andrew Ng <ng@deeplearning.ai>", "Rohit P <rohit.prasad15@gmail.com>"]

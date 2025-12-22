@@ -1,5 +1,5 @@
 {
-  "name": "aisuite",
+  "name": "aisuite-extendedmodels",
   "version": "0.1.1",
   "description": "Unified TypeScript library for multiple LLM providers",
   "main": "dist/index.js",

@@ -15,9 +15,9 @@ To run these tests, you need:
    pip install pytest pytest-asyncio python-dotenv
    ```
 
-3. **MCP package** (should already be installed if you have aisuite[mcp]):
+3. **MCP package** (should already be installed if you have aisuite-extendedmodels[mcp]):
    ```bash
-   pip install 'aisuite[mcp]'
+   pip install 'aisuite-extendedmodels[mcp]'
    ```
 
 4. **Environment variables** (for e2e tests that mock LLM calls):
@@ -203,7 +203,7 @@ pytest tests/mcp/ -v -m "integration and not llm"
 - Install Node.js from https://nodejs.org/
 
 **Error: "MCP package not installed"**
-- Run: `pip install 'aisuite[mcp]'`
+- Run: `pip install 'aisuite-extendedmodels[mcp]'`
 
 **Tests hang or timeout**
 - Check Node.js/npx is working: `npx --version`
