@@ -1,4 +1,4 @@
-"""Tests for Google provider functionality (both chat and ASR)."""
+"""Tests for Google Vertex AI provider functionality (both chat and ASR)."""
 
 import io
 import json
@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 
-from aisuite.providers.google_provider import GoogleProvider
+from aisuite.providers.googlevertexai_provider import GooglevertexaiProvider
 from aisuite.provider import ASRError
 from aisuite.framework.message import (
     TranscriptionResult,
@@ -26,7 +26,7 @@ def set_api_key_env_var(monkeypatch):
 
 @pytest.fixture
 def mock_google_speech_response():
-    """Create a mock Google Speech-to-Text API response."""
+    """Create a mock Google Vertex AI Speech-to-Text API response."""
     mock_response = MagicMock()
     mock_result = MagicMock()
     mock_alternative = MagicMock()
@@ -52,7 +52,7 @@ def test_missing_env_vars():
     """Test that an error is raised if required environment variables are missing."""
     with patch.dict("os.environ", {}, clear=True):
         with pytest.raises(EnvironmentError) as exc_info:
-            GoogleProvider()
+            GooglevertexaiProvider()
         assert "Missing one or more required Google environment variables" in str(
             exc_info.value
         )
@@ -68,7 +68,7 @@ def test_vertex_interface():
         selected_model = "our-favorite-model"
         response_text_content = "mocked-text-response-from-model"
 
-        interface = GoogleProvider()
+        interface = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_response.candidates = [MagicMock()]
         mock_response.candidates[0].content.parts = [MagicMock()]
@@ -77,7 +77,7 @@ def test_vertex_interface():
         del mock_response.candidates[0].content.parts[0].function_call
 
         with patch(
-            "aisuite.providers.google_provider.GenerativeModel"
+            "aisuite.providers.googlevertexai_provider.GenerativeModel"
         ) as mock_generative_model:
             mock_model = MagicMock()
             mock_generative_model.return_value = mock_model
@@ -101,7 +101,7 @@ def test_vertex_interface():
         message_history = [{"role": "user", "content": user_greeting}]
         selected_model = "our-favorite-model"
 
-        interface = GoogleProvider()
+        interface = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_response.candidates = [MagicMock()]
         mock_response.candidates[0].content.parts = [MagicMock()]
@@ -114,7 +114,7 @@ def test_vertex_interface():
         mock_response.candidates[0].content.parts[0].text = None
 
         with patch(
-            "aisuite.providers.google_provider.GenerativeModel"
+            "aisuite.providers.googlevertexai_provider.GenerativeModel"
         ) as mock_generative_model:
             mock_model = MagicMock()
             mock_generative_model.return_value = mock_model
@@ -146,7 +146,7 @@ def test_vertex_interface():
 
 def test_convert_openai_to_vertex_ai():
     """Test the message conversion from OpenAI format to Vertex AI format."""
-    interface = GoogleProvider()
+    interface = GooglevertexaiProvider()
     message = {"role": "user", "content": "Hello!"}
 
     # Use the transformer to convert the message
@@ -163,7 +163,7 @@ def test_convert_openai_to_vertex_ai():
 
 def test_role_conversions():
     """Test that different message roles are converted correctly."""
-    interface = GoogleProvider()
+    interface = GooglevertexaiProvider()
 
     messages = [
         {"role": "system", "content": "System message"},
@@ -185,12 +185,12 @@ def test_role_conversions():
     assert result[2].parts[0].text == "Assistant message"
 
 
-class TestGoogleProvider:
-    """Test suite for Google provider functionality."""
+class TestGooglevertexaiProvider:
+    """Test suite for Google Vertex AI provider functionality."""
 
     def test_provider_initialization(self):
-        """Test that Google provider initializes correctly."""
-        provider = GoogleProvider()
+        """Test that Google Vertex AI provider initializes correctly."""
+        provider = GooglevertexaiProvider()
         assert provider is not None
         assert hasattr(provider, "audio")
         assert hasattr(provider.audio, "transcriptions")
@@ -201,14 +201,14 @@ class TestGoogleASR:
 
     def test_audio_transcriptions_create_success(self, mock_google_speech_response):
         """Test successful audio transcription."""
-        google_provider = GoogleProvider()
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_client = MagicMock()
         mock_client.recognize.return_value = mock_google_speech_response
-        google_provider._speech_client = mock_client
+        googlevertexai_provider._speech_client = mock_client
 
         with patch("builtins.open", mock_open(read_data=b"fake audio data")):
-            result = google_provider.audio.transcriptions.create(
-                model="google:latest_long", file="test_audio.wav"
+            result = googlevertexai_provider.audio.transcriptions.create(
+                model="googlevertexai:latest_long", file="test_audio.wav"
             )
 
             assert isinstance(result, TranscriptionResult)
@@ -220,15 +220,15 @@ class TestGoogleASR:
         self, mock_google_speech_response
     ):
         """Test audio transcription with file-like object."""
-        google_provider = GoogleProvider()
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_client = MagicMock()
         mock_client.recognize.return_value = mock_google_speech_response
-        google_provider._speech_client = mock_client
+        googlevertexai_provider._speech_client = mock_client
 
         audio_data = io.BytesIO(b"fake audio data")
 
-        result = google_provider.audio.transcriptions.create(
-            model="google:latest_long", file=audio_data
+        result = googlevertexai_provider.audio.transcriptions.create(
+            model="googlevertexai:latest_long", file=audio_data
         )
 
         assert isinstance(result, TranscriptionResult)
@@ -238,10 +238,10 @@ class TestGoogleASR:
         self, mock_google_speech_response
     ):
         """Test audio transcription with TranscriptionOptions."""
-        google_provider = GoogleProvider()
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_client = MagicMock()
         mock_client.recognize.return_value = mock_google_speech_response
-        google_provider._speech_client = mock_client
+        googlevertexai_provider._speech_client = mock_client
 
         options = TranscriptionOptions(
             language="en",
@@ -250,8 +250,8 @@ class TestGoogleASR:
         )
 
         with patch("builtins.open", mock_open(read_data=b"fake audio data")):
-            result = google_provider.audio.transcriptions.create(
-                model="google:latest_long", file="test_audio.wav", options=options
+            result = googlevertexai_provider.audio.transcriptions.create(
+                model="googlevertexai:latest_long", file="test_audio.wav", options=options
             )
 
             mock_client.recognize.assert_called_once()
@@ -259,18 +259,18 @@ class TestGoogleASR:
             assert result.text == "Hello, this is a test transcription."
 
     def test_audio_transcriptions_create_error_handling(self):
-        """Test handling of Google Speech API errors."""
-        google_provider = GoogleProvider()
+        """Test handling of Google Vertex AI Speech API errors."""
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_client = MagicMock()
         mock_client.recognize.side_effect = Exception("API Error")
-        google_provider._speech_client = mock_client
+        googlevertexai_provider._speech_client = mock_client
 
         with patch("builtins.open", mock_open(read_data=b"fake audio data")):
             with pytest.raises(
-                ASRError, match="Google Speech-to-Text error: API Error"
+                ASRError, match="Google Vertex AI Speech-to-Text error: API Error"
             ):
-                google_provider.audio.transcriptions.create(
-                    model="google:latest_long", file="test_audio.wav"
+                googlevertexai_provider.audio.transcriptions.create(
+                    model="googlevertexai:latest_long", file="test_audio.wav"
                 )
 
     @pytest.mark.asyncio
@@ -278,7 +278,7 @@ class TestGoogleASR:
         self, mock_google_speech_response
     ):
         """Test streaming audio transcription with fixed config parameter."""
-        google_provider = GoogleProvider()
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_client = MagicMock()
 
         # Mock streaming response
@@ -291,11 +291,11 @@ class TestGoogleASR:
         mock_streaming_response.results = [mock_streaming_result]
 
         mock_client.streaming_recognize.return_value = [mock_streaming_response]
-        google_provider._speech_client = mock_client
+        googlevertexai_provider._speech_client = mock_client
 
         with patch("builtins.open", mock_open(read_data=b"fake audio data")):
-            result = google_provider.audio.transcriptions.create_stream_output(
-                model="google:latest_long", file="test_audio.wav"
+            result = googlevertexai_provider.audio.transcriptions.create_stream_output(
+                model="googlevertexai:latest_long", file="test_audio.wav"
             )
 
             assert hasattr(result, "__aiter__")
@@ -314,8 +314,8 @@ class TestGoogleASR:
 
     def test_parse_google_response_complete(self, mock_google_speech_response):
         """Test parsing complete Google response."""
-        google_provider = GoogleProvider()
-        result = google_provider.audio.transcriptions._parse_google_response(
+        googlevertexai_provider = GooglevertexaiProvider()
+        result = googlevertexai_provider.audio.transcriptions._parse_google_response(
             mock_google_speech_response
         )
 
@@ -334,11 +334,11 @@ class TestGoogleASR:
 
     def test_parse_google_response_empty_results(self):
         """Test parsing response with empty results."""
-        google_provider = GoogleProvider()
+        googlevertexai_provider = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_response.results = []
 
-        result = google_provider.audio.transcriptions._parse_google_response(
+        result = googlevertexai_provider.audio.transcriptions._parse_google_response(
             mock_response
         )
         assert result.text == ""

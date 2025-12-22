@@ -28,7 +28,7 @@ class TestParamValidatorCommonParams:
     def test_language_mapping_google(self):
         """Test that language param maps to language_code and expands for Google."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"language": "en"})
+        result = validator.validate_and_map("googlevertexai", {"language": "en"})
         assert result == {"language_code": "en-US"}
 
     def test_prompt_mapping_openai(self):
@@ -46,7 +46,7 @@ class TestParamValidatorCommonParams:
     def test_prompt_mapping_google(self):
         """Test that prompt param maps to speech_contexts for Google."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"prompt": "technical terms"})
+        result = validator.validate_and_map("googlevertexai", {"prompt": "technical terms"})
         assert result == {"speech_contexts": [{"phrases": ["technical terms"]}]}
 
     def test_temperature_mapping_openai(self):
@@ -64,7 +64,7 @@ class TestParamValidatorCommonParams:
     def test_temperature_ignored_google(self):
         """Test that temperature param is ignored for Google (not supported)."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"temperature": 0.5})
+        result = validator.validate_and_map("googlevertexai", {"temperature": 0.5})
         assert result == {}
 
 
@@ -85,7 +85,7 @@ class TestParamValidatorTransformations:
         }
 
         for input_lang, expected_output in test_cases.items():
-            result = validator.validate_and_map("google", {"language": input_lang})
+            result = validator.validate_and_map("googlevertexai", {"language": input_lang})
             assert result == {
                 "language_code": expected_output
             }, f"Failed for {input_lang}: expected {expected_output}, got {result}"
@@ -93,14 +93,14 @@ class TestParamValidatorTransformations:
     def test_google_language_expansion_unknown_code(self):
         """Test Google language code expansion for unknown 2-letter code (fallback to -US)."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"language": "xx"})
+        result = validator.validate_and_map("googlevertexai", {"language": "xx"})
         assert result == {"language_code": "xx-US"}
 
     def test_google_language_no_expansion_for_full_code(self):
         """Test that Google doesn't expand already full language codes."""
         validator = ParamValidator("strict")
         # When a full locale code is passed to language_code directly (not via common param)
-        result = validator.validate_and_map("google", {"language_code": "en-GB"})
+        result = validator.validate_and_map("googlevertexai", {"language_code": "en-GB"})
         assert result == {"language_code": "en-GB"}
 
     def test_deepgram_prompt_to_keywords_single_word(self):
@@ -128,7 +128,7 @@ class TestParamValidatorTransformations:
     def test_google_prompt_to_speech_contexts(self):
         """Test Google wraps prompt in speech_contexts structure."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"prompt": "technical terms"})
+        result = validator.validate_and_map("googlevertexai", {"prompt": "technical terms"})
         assert result == {"speech_contexts": [{"phrases": ["technical terms"]}]}
 
 
@@ -186,7 +186,7 @@ class TestParamValidatorProviderSpecific:
         """Test Google enable_automatic_punctuation param passes through."""
         validator = ParamValidator("strict")
         result = validator.validate_and_map(
-            "google", {"enable_automatic_punctuation": True}
+            "googlevertexai", {"enable_automatic_punctuation": True}
         )
         assert result == {"enable_automatic_punctuation": True}
 
@@ -194,14 +194,14 @@ class TestParamValidatorProviderSpecific:
         """Test Google enable_speaker_diarization param passes through."""
         validator = ParamValidator("strict")
         result = validator.validate_and_map(
-            "google", {"enable_speaker_diarization": True}
+            "googlevertexai", {"enable_speaker_diarization": True}
         )
         assert result == {"enable_speaker_diarization": True}
 
     def test_google_diarization_speaker_count(self):
         """Test Google diarization_speaker_count param passes through."""
         validator = ParamValidator("strict")
-        result = validator.validate_and_map("google", {"diarization_speaker_count": 3})
+        result = validator.validate_and_map("googlevertexai", {"diarization_speaker_count": 3})
         assert result == {"diarization_speaker_count": 3}
 
 
@@ -248,7 +248,7 @@ class TestParamValidatorMixedParams:
         """Test Google with common params + provider-specific params."""
         validator = ParamValidator("strict")
         result = validator.validate_and_map(
-            "google",
+            "googlevertexai",
             {
                 "language": "en",
                 "enable_automatic_punctuation": True,
@@ -414,7 +414,7 @@ class TestParamValidatorEdgeCases:
         # If someone passes both 'language' and 'language_code' to Google
         # The common param 'language' should map to 'language_code'
         result = validator.validate_and_map(
-            "google",
+            "googlevertexai",
             {
                 "language": "en",
                 "language_code": "fr-FR",  # This should be overridden
@@ -445,13 +445,13 @@ class TestParamValidatorRegistry:
         """Test COMMON_PARAMS includes all ASR providers."""
         assert "openai" in COMMON_PARAMS["language"]
         assert "deepgram" in COMMON_PARAMS["language"]
-        assert "google" in COMMON_PARAMS["language"]
+        assert "googlevertexai" in COMMON_PARAMS["language"]
 
     def test_provider_params_has_all_providers(self):
         """Test PROVIDER_PARAMS includes all ASR providers."""
         assert "openai" in PROVIDER_PARAMS
         assert "deepgram" in PROVIDER_PARAMS
-        assert "google" in PROVIDER_PARAMS
+        assert "googlevertexai" in PROVIDER_PARAMS
 
     def test_google_language_map_completeness(self):
         """Test GOOGLE_LANGUAGE_MAP has common language codes."""

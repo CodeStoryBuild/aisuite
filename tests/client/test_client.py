@@ -28,7 +28,7 @@ def provider_configs():
         "mistral": {
             "api_key": "mistral-api-key",
         },
-        "google": {
+        "googlevertexai": {
             "project_id": "test_google_project_id",
             "region": "us-west4",
             "application_credentials": "test_google_application_credentials",
@@ -82,8 +82,8 @@ def provider_configs():
             "anthropic-model",
         ),
         (
-            "aisuite.providers.google_provider.GoogleProvider.chat_completions_create",
-            "google",
+            "aisuite.providers.googlevertexai_provider.GooglevertexaiProvider.chat_completions_create",
+            "googlevertexai",
             "google-model",
         ),
         (
@@ -396,7 +396,7 @@ class TestClientASRParameterValidation:
     def test_common_param_mapping_at_client_level(self, mock_create_provider):
         """Test that common parameters are mapped correctly at Client level."""
         client = Client(
-            provider_configs={"google": {"project_id": "test", "region": "us"}},
+            provider_configs={"googlevertexai": {"project_id": "test", "region": "us"}},
             extra_param_mode="strict",
         )
 
@@ -407,7 +407,7 @@ class TestClientASRParameterValidation:
 
         # Use common param "language" which should map to "language_code" for Google
         result = client.audio.transcriptions.create(
-            model="google:latest_long",
+            model="googlevertexai:latest_long",
             file=io.BytesIO(b"audio"),
             language="en",  # Common param
         )

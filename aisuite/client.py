@@ -301,7 +301,7 @@ class Completions:
                 f"Invalid model format. Expected 'provider:model', got '{model}'"
             )
 
-        # Extract the provider key from the model identifier, e.g., "google:gemini-xx"
+        # Extract the provider key from the model identifier, e.g., "googlevertexai:gemini-xx"
         provider_key, model_name = model.split(":", 1)
 
         # Validate if the provider is supported

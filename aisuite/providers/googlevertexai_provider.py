@@ -34,7 +34,7 @@ ENABLE_DEBUG_MESSAGES = False
 # https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/function-calling#chat-samples
 
 
-class GoogleMessageConverter:
+class GooglevertexaiMessageConverter:
     @staticmethod
     def convert_user_role_message(message: Dict[str, Any]) -> Content:
         """Convert user or system messages to Google Vertex AI format."""
@@ -98,18 +98,18 @@ class GoogleMessageConverter:
         formatted_messages = []
         for message in messages:
             if message["role"] == "tool":
-                vertex_message = GoogleMessageConverter.convert_tool_role_message(
+                vertex_message = GooglevertexaiMessageConverter.convert_tool_role_message(
                     message
                 )
                 if vertex_message:
                     formatted_messages.append(vertex_message)
             elif message["role"] == "assistant":
                 formatted_messages.append(
-                    GoogleMessageConverter.convert_assistant_role_message(message)
+                    GooglevertexaiMessageConverter.convert_assistant_role_message(message)
                 )
             else:  # user or system role
                 formatted_messages.append(
-                    GoogleMessageConverter.convert_user_role_message(message)
+                    GooglevertexaiMessageConverter.convert_user_role_message(message)
                 )
 
         return formatted_messages
@@ -197,7 +197,7 @@ class GoogleMessageConverter:
         return openai_response
 
 
-class GoogleProvider(Provider):
+class GooglevertexaiProvider(Provider):
     """Implements the ProviderInterface for interacting with Google's Vertex AI."""
 
     def __init__(self, **config):
@@ -219,7 +219,7 @@ class GoogleProvider(Provider):
 
         vertexai.init(project=self.project_id, location=self.location)
 
-        self.transformer = GoogleMessageConverter()
+        self.transformer = GooglevertexaiMessageConverter()
 
         # Initialize Speech client lazily
         self._speech_client = None

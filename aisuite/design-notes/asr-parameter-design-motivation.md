@@ -69,7 +69,7 @@ result = client.audio.transcriptions.create(
 **Google's speech contexts:**
 ```python
 result = client.audio.transcriptions.create(
-    model="google:latest_long",
+    model="googlevertexai:latest_long",
     file="meeting.mp3",
     language_code="en-US",
     enable_automatic_punctuation=True,  # Google-specific

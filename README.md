@@ -4,7 +4,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 `aisuite` is a lightweight Python library that provides a **unified API for working with multiple Generative AI providers**.  
-It offers a consistent interface for models from *OpenAI, Anthropic, Google, Hugging Face, AWS, Cohere, Mistral, Ollama*, and others—abstracting away SDK differences, authentication details, and parameter variations.  
+It offers a consistent interface for models from *OpenAI, Anthropic, Google Vertex AI, Google GenAI, Hugging Face, AWS, Cohere, Mistral, Ollama*, and others—abstracting away SDK differences, authentication details, and parameter variations.  
 Its design is modeled after OpenAI’s API style, making it instantly familiar and easy to adopt.
 
 `aisuite` lets developers build and **run LLM-based or agentic applications across providers** with minimal setup.  
@@ -17,7 +17,7 @@ It’s designed for low learning curve — so you can focus on building AI syste
 
 `aisuite` is designed to eliminate the complexity of working with multiple LLM providers while keeping your code simple and portable. Whether you're building a chatbot, an agentic application, or experimenting with different models, `aisuite` provides the abstractions you need without getting in your way.
 
-* **Unified API for multiple model providers** – Write your code once and run it with any supported provider. Switch between OpenAI, Anthropic, Google, and others with a single parameter change.
+* **Unified API for multiple model providers** – Write your code once and run it with any supported provider. Switch between OpenAI, Anthropic, Google Vertex AI, Google GenAI, and others with a single parameter change.
 * **Easy agentic app or agent creation** – Build multi-turn agentic applications using a single parameter `max_turns`. No need to manually manage tool execution loops.
 * **Pass Tool calls easily** – Pass real Python functions instead of JSON specs; aisuite handles schema generation and execution automatically.
 * **MCP tools** – Connect to MCP-based tools without writing boilerplate; aisuite handles connection, schema and execution seamlessly.
@@ -101,7 +101,7 @@ The chat API provides a high-level abstraction for model interactions. It suppor
 
 ```python
 response = client.chat.completions.create(
-    model="google:gemini-pro",
+    model="googlevertexai:gemini-1.5-pro",
     messages=[{"role": "user", "content": "Summarize this paragraph."}],
 )
 print(response.choices[0].message.content)

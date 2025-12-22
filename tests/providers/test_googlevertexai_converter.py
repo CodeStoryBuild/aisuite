@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import MagicMock
-from aisuite.providers.google_provider import GoogleMessageConverter
+from aisuite.providers.googlevertexai_provider import GooglevertexaiMessageConverter
 from aisuite.framework.message import Message, ChatCompletionMessageToolCall, Function
 from aisuite.framework import ChatCompletionResponse
 
 
-class TestGoogleMessageConverter(unittest.TestCase):
+class TestGooglevertexaiMessageConverter(unittest.TestCase):
 
     def setUp(self):
-        self.converter = GoogleMessageConverter()
+        self.converter = GooglevertexaiMessageConverter()
 
     def test_convert_request_user_message(self):
         messages = [{"role": "user", "content": "What is the weather today?"}]

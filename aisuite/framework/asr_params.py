@@ -20,19 +20,19 @@ COMMON_PARAMS: Dict[str, Dict[str, Optional[str]]] = {
     "language": {
         "openai": "language",
         "deepgram": "language",
-        "google": "language_code",
+        "googlevertexai": "language_code",
         "huggingface": None,  # Not supported by Inference API
     },
     "prompt": {
         "openai": "prompt",
         "deepgram": "keywords",
-        "google": "speech_contexts",
+        "googlevertexai": "speech_contexts",
         "huggingface": None,  # Not supported
     },
     "temperature": {
         "openai": "temperature",
         "deepgram": None,  # Not supported
-        "google": None,  # Not supported
+        "googlevertexai": None,  # Not supported
         "huggingface": "temperature",  # Supported as generation param
     },
 }
@@ -84,7 +84,7 @@ PROVIDER_PARAMS: Dict[str, Set[str]] = {
         # Streaming
         "interim_results",  # Get interim results while streaming
     },
-    "google": {
+    "googlevertexai": {
         # Basic parameters
         "language_code",  # BCP-47 code like "en-US"
         "model",  # "latest_long" | "latest_short" | "default"
@@ -129,7 +129,7 @@ PROVIDER_PARAMS: Dict[str, Set[str]] = {
 }
 
 
-# Language code expansion for Google (2-letter to locale codes)
+# Language code expansion for Google Vertex AI (2-letter to locale codes)
 GOOGLE_LANGUAGE_MAP = {
     "en": "en-US",
     "es": "es-ES",
@@ -214,7 +214,7 @@ class ParamValidator:
                     )
                     continue
 
-                # Transform value if needed (e.g., "en" -> "en-US" for Google)
+                # Transform value if needed (e.g., "en" -> "en-US" for Google Vertex AI)
                 mapped_value = self._transform_value(provider_key, key, value)
                 result[mapped_key] = mapped_value
 
@@ -242,8 +242,8 @@ class ParamValidator:
         Transform parameter values during mapping.
 
         This handles provider-specific transformations like:
-        - Google: Expanding "en" to "en-US"
-        - Google: Wrapping prompt in speech_contexts structure
+        - Google Vertex AI: Expanding "en" to "en-US"
+        - Google Vertex AI: Wrapping prompt in speech_contexts structure
         - Deepgram: Converting prompt string to keywords list
 
         Args:
@@ -254,13 +254,13 @@ class ParamValidator:
         Returns:
             Transformed parameter value
         """
-        # Google: Expand 2-letter language codes to locale codes
-        if provider_key == "google" and param_key == "language":
+        # Google Vertex AI: Expand 2-letter language codes to locale codes
+        if provider_key == "googlevertexai" and param_key == "language":
             if isinstance(value, str) and len(value) == 2:
                 return GOOGLE_LANGUAGE_MAP.get(value, f"{value}-US")
 
-        # Google: Wrap prompt in speech_contexts structure
-        if provider_key == "google" and param_key == "prompt":
+        # Google Vertex AI: Wrap prompt in speech_contexts structure
+        if provider_key == "googlevertexai" and param_key == "prompt":
             return [{"phrases": [value]}]
 
         # Deepgram: Split prompt into keywords list

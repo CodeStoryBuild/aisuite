@@ -76,7 +76,7 @@ def get_test_asr_models() -> List[str]:
     return [
         "openai:whisper-1",
         "deepgram:nova-2",
-        "google:latest_long",
+        "googlevertexai:latest_long",
         "huggingface:openai/whisper-large-v3",
     ]
 
@@ -188,7 +188,7 @@ def test_asr_google_language_mapping():
     try:
         # Use 2-letter language code that should be expanded for Google
         result = client.audio.transcriptions.create(
-            model="google:latest_long",
+            model="googlevertexai:latest_long",
             file=audio_file_path,
             language="en",  # Should be auto-transformed to "en-US"
         )

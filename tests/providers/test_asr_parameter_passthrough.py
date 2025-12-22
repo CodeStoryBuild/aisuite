@@ -6,7 +6,7 @@ import pytest
 
 from aisuite.providers.openai_provider import OpenaiProvider
 from aisuite.providers.deepgram_provider import DeepgramProvider
-from aisuite.providers.google_provider import GoogleProvider
+from aisuite.providers.googlevertexai_provider import GooglevertexaiProvider
 from aisuite.framework.message import TranscriptionResult
 
 
@@ -136,10 +136,10 @@ class TestOpenAIParameterPassthrough:
 class TestGoogleParameterPassthrough:
     """Test that parameters correctly reach Google Speech SDK."""
 
-    @patch("aisuite.providers.google_provider.vertexai.init")
+    @patch("aisuite.providers.googlevertexai_provider.vertexai.init")
     def test_language_code_param_passthrough(self, mock_vertexai_init):
         """Test language_code parameter reaches Google SDK."""
-        provider = GoogleProvider()
+        provider = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_result = MagicMock()
         mock_alternative = MagicMock()
@@ -164,10 +164,10 @@ class TestGoogleParameterPassthrough:
             config = call_kwargs["config"]
             assert config.language_code == "en-US"
 
-    @patch("aisuite.providers.google_provider.vertexai.init")
+    @patch("aisuite.providers.googlevertexai_provider.vertexai.init")
     def test_enable_automatic_punctuation_passthrough(self, mock_vertexai_init):
         """Test enable_automatic_punctuation parameter reaches Google SDK."""
-        provider = GoogleProvider()
+        provider = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_result = MagicMock()
         mock_alternative = MagicMock()
@@ -192,10 +192,10 @@ class TestGoogleParameterPassthrough:
             config = call_kwargs["config"]
             assert config.enable_automatic_punctuation is True
 
-    @patch("aisuite.providers.google_provider.vertexai.init")
+    @patch("aisuite.providers.googlevertexai_provider.vertexai.init")
     def test_speech_contexts_passthrough(self, mock_vertexai_init):
         """Test speech_contexts parameter (from prompt mapping) reaches Google SDK."""
-        provider = GoogleProvider()
+        provider = GooglevertexaiProvider()
         mock_response = MagicMock()
         mock_result = MagicMock()
         mock_alternative = MagicMock()
