@@ -73,6 +73,11 @@ class GooglegenaiProvider(Provider):
             if kwargs:
                 generate_config.update(kwargs)
 
+            # config does not have max_tokens, but rather max_output_tokens
+            if "max_tokens" in generate_config:
+                generate_config["max_output_tokens"] = generate_config["max_tokens"]
+                del generate_config["max_tokens"]
+
             # Call the Google GenAI SDK
             response = self.client.models.generate_content(
                 model=model,
